@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Optimización - Escuela</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --guinda:        #7B1034;
+            --guinda-dark:   #550A22;
+            --guinda-light:  #9E1A44;
+            --guinda-alpha:  rgba(123, 16, 52, 0.15);
+            --white:         #ffffff;
+            --off-white:     #f8f5f6;
+            --border-light:  rgba(255, 255, 255, 0.15);
+            --sidebar-w:     280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--off-white);
+            overflow-x: hidden;
+        }
+
+        /* ============ SIDEBAR ============ */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: var(--sidebar-w);
+            height: 100vh;
+            background: linear-gradient(160deg, var(--guinda-dark) 0%, var(--guinda) 60%, var(--guinda-light) 100%);
+            color: var(--white);
+            padding: 2rem 0;
+            box-shadow: 4px 0 20px rgba(85, 10, 34, 0.3);
+            z-index: 1000;
+            overflow-y: auto;
+            transition: transform 0.3s ease, width 0.3s ease;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+        }
+
+        .sidebar-header p {
+            font-size: 0.82rem;
+            opacity: 0.85;
+            margin: 0;
+        }
+
+        .sidebar-logo {
+            width: 52px;
+            height: 52px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.6rem;
+        }
+
+        /* Menú de navegación */
+        .nav-menu {
+            list-style: none;
+            padding: 0 1rem;
+        }
+
+        .nav-menu li {
+            margin-bottom: 0.4rem;
+        }
+
+        .nav-menu a {
+            display: flex;
+            align-items: center;
+            padding: 0.85rem 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .nav-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            transform: translateX(4px);
+        }
+
+        .nav-menu a.active {
+            background-color: rgba(255, 255, 255, 0.22);
+            color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-menu i {
+            margin-right: 0.9rem;
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+            opacity: 0.85;
+        }
+
+        .nav-section-title {
+            padding: 0.5rem 2.2rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.55;
+            margin-top: 0.8rem;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ============ TOGGLE BUTTON ============ */
+        .sidebar-toggle {
+            position: fixed;
+            top: 1.3rem;
+            left: calc(var(--sidebar-w) + 1rem);
+            z-index: 1100;
+            background: var(--guinda);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(85, 10, 34, 0.35);
+            transition: left 0.3s ease, background 0.2s;
+        }
+
+        .sidebar-toggle:hover {
+            background: var(--guinda-dark);
+        }
+
+        .sidebar-toggle.collapsed {
+            left: 1rem;
+        }
+
+        /* ============ MAIN CONTENT ============ */
+        .main-wrapper {
+            margin-left: var(--sidebar-w);
+            min-height: 100vh;
+            background-color: var(--off-white);
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-wrapper.expanded {
+            margin-left: 0;
+        }
+
+        /* Header/Navbar */
+        .top-navbar {
+            background: var(--white);
+            padding: 1.3rem 2rem 1.3rem 4.5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--guinda-dark);
+            margin: 0;
+        }
+
+        .navbar-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        /* ============ CONTENIDO PRINCIPAL ============ */
+        .main-content {
+            padding: 2rem;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--guinda-dark) 0%, var(--guinda) 60%, var(--guinda-light) 100%);
+            color: var(--white);
+            padding: 3rem 2.5rem;
+            border-radius: 14px;
+            margin-bottom: 2rem;
+            box-shadow: 0 6px 24px rgba(85, 10, 34, 0.25);
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-text p {
+            font-size: 1.05rem;
+            line-height: 1.7;
+            opacity: 0.93;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 30px;
+            padding: 0.4rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .hero-logo {
+            text-align: center;
+        }
+
+        .hero-logo-box {
+            width: 150px;
+            height: 150px;
+            background-color: var(--white);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            padding: 0.8rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        }
+
+        .hero-logo-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* ============ INFO CARDS ============ */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-card {
+            background: var(--white);
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.07);
+            border-left: 5px solid var(--guinda);
+            transition: all 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(123, 16, 52, 0.12);
+        }
+
+        .info-card h3 {
+            color: var(--guinda-dark);
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .info-card p {
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ============ DESCRIPCIÓN ============ */
+        .description-block {
+            background: var(--white);
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 14px rgba(0, 0, 0, 0.07);
+        }
+
+        .description-block h2 {
+            color: var(--guinda-dark);
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .description-block p {
+            color: #555;
+            line-height: 1.75;
+            margin-bottom: 1rem;
+        }
+
+        .description-block p:last-child {
+            margin-bottom: 0;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .method-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: var(--off-white);
+            border: 1px solid #e8d5da;
+            border-radius: 10px;
+            padding: 0.8rem 1rem;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--guinda-dark);
+        }
+
+        .method-pill i {
+            font-size: 1rem;
+            color: var(--guinda);
+        }
+
+        /* ============ EQUIPOS (al final) ============ */
+        .teams-section {
+            margin-top: 2rem;
+        }
+
+        .teams-section h2 {
+            color: var(--guinda-dark);
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            font-weight: 600;
+        }
+
+        .team-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .team-card {
+            background: var(--white);
+            padding: 1.6rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--guinda);
+        }
+
+        .team-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 22px rgba(123, 16, 52, 0.14);
+        }
+
+        .team-icon {
+            font-size: 2rem;
+            color: var(--guinda);
+            margin-bottom: 0.8rem;
+        }
+
+        .team-card h3 {
+            color: var(--guinda-dark);
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        .team-card p {
+            color: #888;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--white);
+            color: #888;
+            text-align: center;
+            padding: 1.8rem 2rem;
+            border-top: 1px solid #eadbdf;
+            margin-top: 3rem;
+        }
+
+        .footer p {
+            margin: 0.4rem 0;
+            font-size: 0.9rem;
+        }
+
+        .footer-brand {
+            font-weight: 700;
+            color: var(--guinda-dark);
+        }
+
+        /* Scrollbar personalizado */
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-track { background: rgba(255,255,255,0.08); }
+        .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 3px; }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            :root { --sidebar-w: 260px; }
+
+            .main-content { padding: 1rem; }
+
+            .hero-content { grid-template-columns: 1fr; }
+            .hero-text h1 { font-size: 1.7rem; }
+
+            .top-navbar { padding: 1rem 1rem 1rem 4rem; }
+        }
+
+        @media (max-width: 576px) {
+            :root { --sidebar-w: 240px; }
+
+            .hero-section { padding: 1.5rem 1rem; }
+            .hero-text h1 { font-size: 1.4rem; }
+            .hero-logo-box { width: 110px; height: 110px; }
+
+            .info-cards { grid-template-columns: 1fr; gap: 1rem; }
+            .team-cards { grid-template-columns: repeat(2, 1fr); }
+
+            .navbar-title { font-size: 1.1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============ TOGGLE BUTTON ============ -->
+    <button class="sidebar-toggle" id="sidebarToggle" title="Mostrar/Ocultar menú">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <h3>Optimización Matemática</h3>
+            <p>IPN · UPIIZ · 6CM1</p>
+        </div>
+
+        <nav>
+            <div class="nav-section-title">Módulos</div>
+            <ul class="nav-menu">
+                <li>
+                    <a href="#inicio" onclick="navegarSeccion('inicio', this); return false;" class="active">
+                        <i class="fas fa-home"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#grafico" onclick="navegarSeccion('grafico', this); return false;">
+                        <i class="fas fa-bezier-curve"></i>
+                        <span>Método Gráfico</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#simplex-max" onclick="navegarSeccion('simplex-max', this); return false;">
+                        <i class="fas fa-arrow-trend-up"></i>
+                        <span>Simplex Maximización</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#simplex-min" onclick="navegarSeccion('simplex-min', this); return false;">
+                        <i class="fas fa-arrow-trend-down"></i>
+                        <span>Simplex Minimización</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#min-avanzado" onclick="navegarSeccion('min-avanzado', this); return false;">
+                        <i class="fas fa-sliders"></i>
+                        <span>Minimización Avanzada</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#datos" onclick="navegarSeccion('datos', this); return false;">
+                        <i class="fas fa-database"></i>
+                        <span>Gestión de Datos</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- ============ MAIN WRAPPER ============ -->
+    <div class="main-wrapper" id="mainWrapper">
+
+        <!-- TOP NAVBAR -->
+        <div class="top-navbar">
+            <h2 class="navbar-title" id="navbarTitle">Inicio</h2>
+            <div class="navbar-actions">
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+
+            <!-- HERO SECTION -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Sistema de Optimización Matemática</h1>
+                        <p>
+                            Plataforma interactiva para resolver problemas de programación lineal mediante
+                            los métodos gráfico y simplex, abarcando tanto la maximización como la minimización
+                            de funciones objetivo bajo restricciones reales.
+                        </p>
+                        <span class="hero-badge">
+                            <i class="fas fa-circle-dot"></i>
+                            Métodos Cuantitativos para la Toma de Decisiones
+                        </span>
+                    </div>
+                    <div class="hero-logo">
+                        <div class="hero-logo-box">
+                            <img src="/img/logotipo_ipn.png" alt="IPN">
+                        </div>
+                        <p style="margin-top: 0.8rem; font-size: 0.85rem; opacity: 0.8;">IPN · UPIIZ</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESCRIPCIÓN DEL PROYECTO -->
+            <div class="description-block">
+                <h2><i class="fas fa-book-open" style="color:var(--guinda);"></i> Acerca del Proyecto</h2>
+                <p>
+                    Este sistema implementa y documenta los principales métodos de <strong>programación lineal</strong>
+                    utilizados en la toma de decisiones cuantitativas. El objetivo central es proporcionar
+                    una herramienta de seguimiento y visualización que permita comprender paso a paso
+                    cómo cada método opera sobre problemas con múltiples variables y restricciones.
+                </p>
+                <p>
+                    La plataforma cubre desde la representación gráfica de regiones factibles hasta la
+                    iteración de tablas simplex, mostrando en cada etapa las transformaciones algebraicas
+                    que conducen a la solución óptima. Cada módulo incluye ejemplos, formulación del
+                    problema, procedimiento y resultado final.
+                </p>
+
+                <div class="method-grid">
+                    <div class="method-pill">
+                        <i class="fas fa-bezier-curve"></i> Método Gráfico
+                    </div>
+                    <div class="method-pill">
+                        <i class="fas fa-arrow-trend-up"></i> Simplex – Maximización
+                    </div>
+                    <div class="method-pill">
+                        <i class="fas fa-arrow-trend-down"></i> Simplex – Minimización
+                    </div>
+                    <div class="method-pill">
+                        <i class="fas fa-sliders"></i> Minimización Avanzada
+                    </div>
+                    <div class="method-pill">
+                        <i class="fas fa-database"></i> Gestión de Datos
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFORMACIÓN GENERAL -->
+            <div class="info-cards">
+                <div class="info-card">
+                    <h3>🏫 Institución</h3>
+                    <p>
+                        <strong>Instituto Politécnico Nacional</strong><br>
+                        Unidad Profesional Interdisciplinaria de Ingeniería – Zacatecas (UPIIZ)
+                    </p>
+                </div>
+                <div class="info-card">
+                    <h3>📚 Materia</h3>
+                    <p>
+                        <strong>Métodos Cuantitativos para la Toma de Decisiones</strong><br>
+                        Mtra. Yesika Yuriri Rodríguez Martínez
+                    </p>
+                </div>
+                <div class="info-card">
+                    <h3>🎓 Semestre</h3>
+                    <p>
+                        <strong>Grupo 6CM1</strong><br>
+                        Ingeniería en Sistemas Computacionales
+                    </p>
+                </div>
+            </div>
+
+            <!-- SECCIÓN DE EQUIPOS (al final) -->
+            <div class="teams-section">
+                <h2>Integrantes por módulo</h2>
+                <div class="team-cards">
+                    <div class="team-card">
+                        <div class="team-icon"><i class="fas fa-bezier-curve"></i></div>
+                        <h3>Equipo 1</h3>
+                        <p>Método gráfico y optimización</p>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-icon"><i class="fas fa-arrow-trend-up"></i></div>
+                        <h3>Equipo 2</h3>
+                        <p>Simplex maximización</p>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-icon"><i class="fas fa-arrow-trend-down"></i></div>
+                        <h3>Equipo 3</h3>
+                        <p>Simplex minimización</p>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-icon"><i class="fas fa-sliders"></i></div>
+                        <h3>Equipo 4</h3>
+                        <p>Minimización avanzada</p>
+                    </div>
+                    <div class="team-card">
+                        <div class="team-icon"><i class="fas fa-database"></i></div>
+                        <h3>Equipo 5</h3>
+                        <p>Gestión de datos</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p><span class="footer-brand">Sistema de Optimización Matemática</span> &copy; 2026</p>
+            <p style="font-size: 0.82rem; color: #aaa; margin-top: 0.3rem;">IPN · UPIIZ · Métodos Cuantitativos para la Toma de Decisiones</p>
+        </div>
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const sidebar      = document.getElementById('sidebar');
+        const mainWrapper  = document.getElementById('mainWrapper');
+        const toggleBtn    = document.getElementById('sidebarToggle');
+
+        toggleBtn.addEventListener('click', () => {
+            const collapsed = sidebar.classList.toggle('collapsed');
+            mainWrapper.classList.toggle('expanded', collapsed);
+            toggleBtn.classList.toggle('collapsed', collapsed);
+            toggleBtn.querySelector('i').className = collapsed ? 'fas fa-bars' : 'fas fa-bars';
+        });
+
+        function navegarSeccion(seccion, el) {
+            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
+            el.classList.add('active');
+
+            const titles = {
+                'inicio':       'Inicio',
+                'grafico':      'Método Gráfico',
+                'simplex-max':  'Simplex – Maximización',
+                'simplex-min':  'Simplex – Minimización',
+                'min-avanzado': 'Minimización Avanzada',
+                'datos':        'Gestión de Datos'
+            };
+            document.getElementById('navbarTitle').textContent = titles[seccion] || 'Inicio';
+        }
+    </script>
+
+</body>
+</html>
