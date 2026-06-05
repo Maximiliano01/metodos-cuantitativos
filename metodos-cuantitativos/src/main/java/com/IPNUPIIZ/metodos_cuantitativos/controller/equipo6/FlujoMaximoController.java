@@ -14,6 +14,6 @@ public class FlujoMaximoController {
      */
     @GetMapping
     public String paginaFlujoMaximo() {
-        return "forward:/equipo6/flujo-maximo.html";
+        return "forward:/equipo6/index.html";
     }
 }
