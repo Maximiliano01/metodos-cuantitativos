@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método Gráfico – Sistema de Optimización</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS compartido del proyecto – contiene sidebar, layout, componentes -->
+    <link rel="stylesheet" href="/css/global.css">
+
+    <style>
+        /* ── Agrega aquí los estilos exclusivos de este módulo ── */
+    </style>
+</head>
+<body>
+
+    <!-- Toggle sidebar -->
+    <button class="sidebar-toggle" id="sidebarToggle" title="Mostrar/Ocultar menú">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- ============ SIDEBAR ============ -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <h3>Optimización Matemática</h3>
+            <p>IPN · UPIIZ · 6CM1</p>
+        </div>
+
+        <nav>
+            <div class="nav-section-title">Módulos</div>
+            <ul class="nav-menu">
+                <li>
+                    <a href="/index.html">
+                        <i class="fas fa-home"></i>
+                        <span>Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/equipo1" class="active">
+                        <i class="fas fa-bezier-curve"></i>
+                        <span>Método Gráfico</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/equipo2">
+                        <i class="fas fa-arrow-trend-up"></i>
+                        <span>Simplex Maximización</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/equipo3">
+                        <i class="fas fa-arrow-trend-down"></i>
+                        <span>Simplex Minimización</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/equipo4">
+                        <i class="fas fa-sliders"></i>
+                        <span>Minimización Avanzada</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/equipo5">
+                        <i class="fas fa-database"></i>
+                        <span>Gestión de Datos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/equipo6">
+                        <i class="fas fa-water"></i>
+                        <span>Flujo Máximo</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- ============ MAIN WRAPPER ============ -->
+    <div class="main-wrapper" id="mainWrapper">
+
+        <!-- TOP NAVBAR -->
+        <div class="top-navbar">
+            <h2 class="navbar-title" id="navbarTitle">Método Gráfico</h2>
+            <div class="navbar-actions">
+                <!-- Opcional: botones de acción en la barra superior -->
+            </div>
+        </div>
+
+        <!-- ============ MAIN CONTENT ============ -->
+        <!-- Todo el contenido del módulo va dentro de este div -->
+        <div class="main-content">
+
+            <!-- HERO DE SECCIÓN -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1><i class="fas fa-bezier-curve" style="opacity:0.85;"></i> Método Gráfico</h1>
+                        <p>
+                            Resolución de problemas de programación lineal mediante la representación
+                            gráfica de la región factible y la función objetivo.
+                        </p>
+                        <span class="hero-badge">
+                            <i class="fas fa-circle-dot"></i>
+                            Equipo 1 · Métodos Cuantitativos
+                        </span>
+                    </div>
+                    <div class="hero-logo">
+                        <div class="hero-logo-box">
+                            <img src="/img/logotipo_ipn.png" alt="IPN">
+                        </div>
+                        <p style="margin-top:0.8rem; font-size:0.85rem; opacity:0.8;">IPN · UPIIZ</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── COLOCA AQUÍ EL CONTENIDO DE TU MÓDULO ─────────────────────────
+                 Clases disponibles en global.css:
+                   .content-block   → bloque blanco con sombra y padding
+                   .info-cards      → grid de tarjetas informativas
+                   .info-card       → tarjeta individual (borde guinda)
+                   .pill            → etiqueta pequeña de categoría
+                 Ejemplo:
+
+            <div class="content-block">
+                <h2><i class="fas fa-book-open" style="color:var(--guinda);"></i> Descripción</h2>
+                <p>Texto del módulo...</p>
+            </div>
+
+            <div class="info-cards">
+                <div class="info-card">
+                    <h3>Título</h3>
+                    <p>Descripción</p>
+                </div>
+            </div>
+            ──────────────────────────────────────────────────────────────────── -->
+
+        </div>
+        <!-- /main-content -->
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p><span class="footer-brand">Sistema de Optimización Matemática</span> &copy; 2026</p>
+            <p style="font-size:0.82rem; color:#aaa; margin-top:0.3rem;">
+                IPN · UPIIZ · Métodos Cuantitativos para la Toma de Decisiones
+            </p>
+        </div>
+
+    </div>
+    <!-- /main-wrapper -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- JS compartido – sidebar toggle y detección de ruta activa -->
+    <script src="/js/sidebar.js"></script>
+
+    <script>
+        // Agrega aquí el JavaScript exclusivo de este módulo
+    </script>
+
+</body>
+</html>

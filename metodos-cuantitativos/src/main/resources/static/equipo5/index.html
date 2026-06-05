@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Datos – Sistema de Optimización</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/global.css">
+
+    <style>
+        /* ── Agrega aquí los estilos exclusivos de este módulo ── */
+    </style>
+</head>
+<body>
+
+    <button class="sidebar-toggle" id="sidebarToggle" title="Mostrar/Ocultar menú">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><i class="fas fa-chart-bar"></i></div>
+            <h3>Optimización Matemática</h3>
+            <p>IPN · UPIIZ · 6CM1</p>
+        </div>
+        <nav>
+            <div class="nav-section-title">Módulos</div>
+            <ul class="nav-menu">
+                <li><a href="/index.html"><i class="fas fa-home"></i><span>Inicio</span></a></li>
+                <li><a href="/equipo1"><i class="fas fa-bezier-curve"></i><span>Método Gráfico</span></a></li>
+                <li><a href="/equipo2"><i class="fas fa-arrow-trend-up"></i><span>Simplex Maximización</span></a></li>
+                <li><a href="/equipo3"><i class="fas fa-arrow-trend-down"></i><span>Simplex Minimización</span></a></li>
+                <li><a href="/equipo4"><i class="fas fa-sliders"></i><span>Minimización Avanzada</span></a></li>
+                <li><a href="/equipo5" class="active"><i class="fas fa-database"></i><span>Gestión de Datos</span></a></li>
+                <li><a href="/equipo6"><i class="fas fa-water"></i><span>Flujo Máximo</span></a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main-wrapper" id="mainWrapper">
+
+        <div class="top-navbar">
+            <h2 class="navbar-title" id="navbarTitle">Gestión de Datos</h2>
+            <div class="navbar-actions"></div>
+        </div>
+
+        <div class="main-content">
+
+            <div class="hero-section">
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1><i class="fas fa-database" style="opacity:0.85;"></i> Gestión de Datos</h1>
+                        <p>
+                            Administración, almacenamiento y procesamiento de datos para su uso
+                            en modelos de optimización cuantitativa.
+                        </p>
+                        <span class="hero-badge">
+                            <i class="fas fa-circle-dot"></i>
+                            Equipo 5 · Métodos Cuantitativos
+                        </span>
+                    </div>
+                    <div class="hero-logo">
+                        <div class="hero-logo-box"><img src="/img/logotipo_ipn.png" alt="IPN"></div>
+                        <p style="margin-top:0.8rem; font-size:0.85rem; opacity:0.8;">IPN · UPIIZ</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── COLOCA AQUÍ EL CONTENIDO DE TU MÓDULO ── -->
+
+        </div>
+
+        <div class="footer">
+            <p><span class="footer-brand">Sistema de Optimización Matemática</span> &copy; 2026</p>
+            <p style="font-size:0.82rem; color:#aaa; margin-top:0.3rem;">IPN · UPIIZ · Métodos Cuantitativos para la Toma de Decisiones</p>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/sidebar.js"></script>
+    <script>
+        // Agrega aquí el JavaScript exclusivo de este módulo
+    </script>
+</body>
+</html>
