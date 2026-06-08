@@ -5,86 +5,375 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modelo de Transporte – Sistema de Optimización</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/global.css">
+    <script src="https://unpkg.com/vis-network@9.1.2/dist/vis-network.min.js"></script>
 
+    <link rel="stylesheet" href="/css/global.css">
     <style>
-        /* ── Agrega aquí los estilos exclusivos de este módulo ── */
+        .hero-section h1 { font-size: 2rem !important; }
+        .content-block h2 { font-size: 1.25rem !important; }
+
+        /* Estilos de la tabla */
+        .table-minimalista thead th {
+            border-bottom: 2px solid #333 !important;
+            font-weight: 600;
+            color: #333;
+            padding-bottom: 0.6rem !important;
+        }
+        .table-minimalista th, .table-minimalista td {
+            padding: 0.5rem !important;
+            vertical-align: middle;
+        }
+
+        /* Inputs de costos */
+        .input-costo {
+            width: 65px;
+            text-align: center;
+            padding: 0.2rem !important;
+            font-size: 0.85rem !important;
+            border: none !important;
+            background: transparent !important;
+            box-shadow: none !important;
+            font-weight: 500;
+        }
+        .input-costo:focus {
+            outline: none !important;
+            background: rgba(123, 16, 52, 0.04) !important;
+            border-radius: 4px;
+        }
+
+        .sub-costo { font-size: 0.7rem; color: #888; display: block; margin-bottom: 1px; }
+        .texto-restriccion { color: var(--guinda) !important; font-weight: 700 !important; }
+
+        /* Botones */
+        .btn-guinda {
+            background: var(--guinda);
+            color: var(--white);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .btn-guinda:hover { background: var(--guinda-dark); color: var(--white); transform: translateY(-1px); }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--guinda);
+            border: 1.5px solid var(--guinda);
+            padding: 0.55rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-outline:hover { background: var(--guinda); color: var(--white); }
+
+        /* Contenedor del Grafo con Botón Home flotante */
+        .network-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        #network-transporte {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+        .btn-reset-zoom {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            z-index: 10;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #4a5568;
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .btn-reset-zoom:hover {
+            background: #f8f9fa;
+            color: var(--guinda);
+            border-color: var(--guinda-light);
+        }
+
+        /* Tarjeta de Rutas */
+        .card-definicion-rutas {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-definicion-rutas .card-header-estilo {
+            background: rgba(123, 16, 52, 0.05);
+            border-bottom: 1.5px solid rgba(123, 16, 52, 0.15);
+            padding: 0.85rem 1rem;
+            font-weight: 600;
+            color: var(--guinda-dark);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-definicion-rutas .card-body-scroll {
+            padding: 1rem;
+            overflow-y: auto;
+            flex-grow: 1;
+            background: #fff;
+        }
+
+        .ruta-item-badge {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff;
+            border: 1px solid #f0f0f0;
+            padding: 0.55rem 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .ruta-item-badge:hover { border-color: var(--guinda-light); }
+
+        /* Tarjeta Verde para Costo Total Z */
+        .resultado-card-transporte-verde {
+            background-color: #d1e7dd;
+            border: 1px solid #badbcc;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+        .resultado-card-transporte-verde .costo-valor-verde {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #0f5132;
+            display: block;
+            line-height: 1.1;
+        }
+
+        /* Estilo para los bloques analíticos de los pasos */
+        .analisis-algoritmico {
+            background: #f8fafc;
+            border-left: 4px solid var(--guinda);
+            padding: 0.75rem 1rem;
+            border-radius: 0 6px 6px 0;
+            font-size: 0.88rem;
+            line-height: 1.5;
+        }
+
+        /* TOAST  */
+        .toast-container-custom {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1060;
+        }
+        .toast-minimalista {
+            background: #1e293b;
+            color: #f8fafc;
+            border-radius: 6px;
+            padding: 0.75rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            min-width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .toast-minimalista.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .toast-minimalista .btn-close-custom {
+            background: transparent;
+            border: none;
+            color: #f8fafc;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        .toast-minimalista .btn-close-custom:hover { opacity: 1; }
     </style>
 </head>
 <body>
+<button class="sidebar-toggle" id="sidebarToggle" title="Mostrar/Ocultar menú">
+    <i class="fas fa-bars"></i>
+</button>
+<!-- SIDEBAR-->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-logo"><i class="fas fa-chart-bar"></i></div>
+        <h3>Optimización Matemática</h3>
+        <p>IPN · UPIIZ · 6CM1</p>
+    </div>
+    <nav>
+        <div class="nav-section-title">Módulos</div>
+        <ul class="nav-menu">
+            <li><a href="/index.html"><i class="fas fa-home"></i><span>Inicio</span></a></li>
+            <li><a href="/equipo1/index.html"><i class="fas fa-bezier-curve"></i><span>Método Gráfico</span></a></li>
+            <li><a href="/equipo2/index.html"><i class="fas fa-arrow-trend-up"></i><span>Simplex Maximización</span></a></li>
+            <li><a href="/equipo3/index.html"><i class="fas fa-arrow-trend-down"></i><span>Simplex Minimización</span></a></li>
+            <li><a href="/equipo4/index.html"><i class="fas fa-sliders"></i><span>Minimización Avanzada</span></a></li>
+            <li><a href="/equipo5/index.html"><i class="fas fa-database"></i><span>PERT CPM</span></a></li>
+            <li><a href="/equipo6/index.html"><i class="fas fa-water"></i><span>Flujo Máximo</span></a></li>
+            <li><a href="/equipo7/index.html" class="active"><i class="fas fa-truck"></i><span>Modelo de Transporte</span></a></li>
+        </ul>
+    </nav>
+</aside>
+<!-- FIN DEL SIDEBAR-->
 
-    <button class="sidebar-toggle" id="sidebarToggle" title="Mostrar/Ocultar menú">
-        <i class="fas fa-bars"></i>
-    </button>
 
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo"><i class="fas fa-chart-bar"></i></div>
-            <h3>Optimización Matemática</h3>
-            <p>IPN · UPIIZ · 6CM1</p>
+<div class="main-wrapper" id="mainWrapper">
+    <!-- BARRA DE TITULO -->
+    <div class="top-navbar">
+        <h2 class="navbar-title" id="navbarTitle">Modelo de Transporte</h2>
+    </div>
+    <!-- FIN DE BARRA DE TITULO -->
+    <!-- CUERPO DEL MODULO-->
+    <div class="main-content">
+        <!-- SECCION DESCRIPCION DEL MODULO-->
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1><i class="fas fa-truck" style="opacity:0.85;"></i> Modelo de Transporte</h1>
+                    <p>Resolución de matrices balanceadas y desbalanceadas de costos de distribución utilizando los criterios de la <strong>Esquina Noroeste</strong> y del <strong>Costo Mínimo</strong>.</p>
+                    <span class="hero-badge"><i class="fas fa-circle-dot"></i> Equipo 7 · Métodos Cuantitativos</span>
+                </div>
+            </div>
         </div>
-        <nav>
-            <div class="nav-section-title">Módulos</div>
-            <ul class="nav-menu">
-                <li><a href="/index.html"><i class="fas fa-home"></i><span>Inicio</span></a></li>
-                <li><a href="/equipo1"><i class="fas fa-bezier-curve"></i><span>Método Gráfico</span></a></li>
-                <li><a href="/equipo2"><i class="fas fa-arrow-trend-up"></i><span>Simplex Maximización</span></a></li>
-                <li><a href="/equipo3"><i class="fas fa-arrow-trend-down"></i><span>Simplex Minimización</span></a></li>
-                <li><a href="/equipo4"><i class="fas fa-sliders"></i><span>Minimización Avanzada</span></a></li>
-                <li><a href="/equipo5"><i class="fas fa-database"></i><span>PERT CPM</span></a></li>
-                <li><a href="/equipo6"><i class="fas fa-water"></i><span>Flujo Máximo</span></a></li>
-                <li><a href="/equipo7" class="active"><i class="fas fa-truck"></i><span>Modelo de Transporte</span></a></li>
-            </ul>
-        </nav>
-    </aside>
-
-    <div class="main-wrapper" id="mainWrapper">
-
-        <div class="top-navbar">
-            <h2 class="navbar-title" id="navbarTitle">Modelo de Transporte</h2>
-            <div class="navbar-actions"></div>
-        </div>
-
-        <div class="main-content">
-
-            <div class="hero-section">
-                <div class="hero-content">
-                    <div class="hero-text">
-                        <h1><i class="fas fa-truck" style="opacity:0.85;"></i> Modelo de Transporte</h1>
-                        <p>
-                            Optimización del costo de distribución de bienes desde múltiples
-                            orígenes hacia múltiples destinos cumpliendo oferta y demanda.
-                        </p>
-                        <span class="hero-badge">
-                            <i class="fas fa-circle-dot"></i>
-                            Equipo 7 · Métodos Cuantitativos
-                        </span>
+        <!-- FIN SECCION DESCRIPCION DEL MODULO-->
+        <div class="row g-4">
+            <!-- SECCION DIMENSIONES DE LA RED-->
+            <div class="col-12">
+                <div class="content-block m-0">
+                    <h2><i class="fas fa-sliders" style="color:var(--guinda);"></i> 1. Dimensiones de la Red</h2>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="fw-semibold small mb-1">Orígenes (Filas):</label>
+                            <input type="number" id="filas" class="form-control" value="3" min="1" style="border-radius:8px;">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-semibold small mb-1">Destinos (Columnas):</label>
+                            <input type="number" id="columnas" class="form-control" value="3" min="1" style="border-radius:8px;">
+                        </div>
                     </div>
-                    <div class="hero-logo">
-                        <div class="hero-logo-box"><img src="/img/logotipo_ipn.png" alt="IPN"></div>
-                        <p style="margin-top:0.8rem; font-size:0.85rem; opacity:0.8;">IPN · UPIIZ</p>
+                    <div class="mt-3 text-end">
+                        <button onclick="generarMatrizInput()" class="btn-guinda px-4"><i class="fas fa-table"></i> Generar Matriz</button>
                     </div>
                 </div>
             </div>
+            <!-- FIN SECCION DIMENSIONES DE LA RED-->
 
-            <!-- ── COLOCA AQUÍ EL CONTENIDO DE TU MÓDULO ── -->
+            <!-- SECCION MATRIZ-->
+            <div class="col-12" id="contenedor-matriz" style="display:none;">
+                <div class="content-block m-0">
+                    <h2><i class="fas fa-edit" style="color:var(--guinda);"></i> 2. Matriz de Costos Unitarios, Oferta y Demanda</h2>
+                    <div id="tabla-input-placeholder" class="table-responsive mb-3"></div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button onclick="limpiarTodo()" class="btn-outline me-auto"><i class="fas fa-trash-can"></i> Reiniciar</button>
+                        <button onclick="cargarValoresEjemplo()" class="btn-outline"><i class="fas fa-magic"></i> Cargar Ejemplo</button>
+                        <button onclick="resolver('noroeste')" class="btn-guinda px-4"><i class="fas fa-compass"></i> Esquina Noroeste</button>
+                        <button onclick="resolver('minimo')" class="btn-guinda px-4"><i class="fas fa-dollar-sign"></i> Costo Mínimo</button>
+                    </div>
+                </div>
+            </div>
+            <!--FIN SECCION MATRIZ-->
 
+
+            <div class="col-12" id="contenedor-resultados" style="display:none;">
+                <!-- SECCION RESPUESTA-->
+                <div class="content-block m-0">
+                    <h2><i class="fas fa-check-circle" style="color: #198754;"></i> 3. Solución Factible Inicial Asignada</h2>
+                    <div id="tabla-final-placeholder" class="table-responsive"></div>
+
+                    <div class="resultado-card-transporte-verde shadow-sm">
+                        <small class="text-uppercase fw-bold text-success small">Costo Total de Distribución Obtenido</small>
+                        <span class="costo-valor-verde" id="costo-total">Z = $0</span>
+                    </div>
+
+                    <h2 class="mt-4 mb-3 text-center"><i class="fas fa-diagram-project" style="color:var(--guinda);"></i> Mapeo y Flujos de la Red de Distribución</h2>
+
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-8">
+                            <div class="network-wrapper">
+                                <button class="btn-reset-zoom" onclick="resetearZoom()" title="Regresar al tamaño original">
+                                    <i class="fas fa-home"></i>
+                                </button>
+                                <div id="network-transporte"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card-definicion-rutas">
+                                <div class="card-header-estilo">
+                                    <i class="fas fa-map-signs"></i> Rutas de Distribución Activas
+                                </div>
+                                <div class="card-body-scroll" id="lista-rutas-dinamica"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECCION DESGLOSE DE SOLUCIÓN-->
+                    <button class="btn-outline w-100 py-2 mt-4" type="button" onclick="togglePasos()" id="btn-pasos-toggle">
+                        <i class="fas fa-eye"></i> Ver Memoria de Cálculo / Iteraciones Paso a Paso (▼)
+                    </button>
+                    <div id="bloque-colapsable-pasos" class="mt-3" style="display: none;">
+                        <div class="p-3 bg-light border rounded">
+                            <h5 class="text-muted mb-3 border-bottom pb-2 font-monospace" style="font-size:0.85rem;">Historial detallado del algoritmo de asignación:</h5>
+                            <div id="desarrollo-pasos" class="d-flex flex-column gap-3"></div>
+                        </div>
+                    </div>
+                    <!-- FIN SECCION DESGLOSE DE SOLUCIÓN-->
+                </div>
+                <!-- FIN SECCION RESPUESTA-->
+            </div>
         </div>
-
-        <div class="footer">
-            <p><span class="footer-brand">Sistema de Optimización Matemática</span> &copy; 2026</p>
-            <p style="font-size:0.82rem; color:#aaa; margin-top:0.3rem;">IPN · UPIIZ · Métodos Cuantitativos para la Toma de Decisiones</p>
-        </div>
-
     </div>
+    <!-- FIN DEL CUERPO DEL MODULO-->
+    <!--FOOTER-->
+    <footer class="footer">
+        <p><span class="footer-brand">Sistema de Optimización Matemática</span> © 2026</p>
+        <p style="font-size:0.82rem; color:#aaa; margin-top:0.3rem;">IPN · UPIIZ · Métodos Cuantitativos para la Toma de Decisiones</p>
+    </footer>
+    <!--FIN DEL FOOTER-->
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/sidebar.js"></script>
-    <script>
-        // Agrega aquí el JavaScript exclusivo de este módulo
-    </script>
+
+<!--TOAST  DE ERROR-->
+<div class="toast-container-custom">
+    <div id="toast-alerta" class="toast-minimalista">
+        <span id="toast-mensaje-body">Mensaje de error interactivo.</span>
+        <button type="button" class="btn-close-custom" onclick="ocultarToast()"><i class="fas fa-times"></i></button>
+    </div>
+</div>
+
+<!--SECCION DE SCRIPTS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/sidebar.js"></script>
+<script src="/js/moduloTransporte.js"></script>
 </body>
 </html>
