@@ -6,150 +6,564 @@
     <title>Simplex Maximización – Sistema de Optimización</title>
 
     <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Poppins (igual que global.css) -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- CSS compartido del proyecto – contiene sidebar, layout, componentes -->
+    <!-- CSS compartido del proyecto -->
     <link rel="stylesheet" href="/css/global.css">
 
     <style>
-        /* ── Agrega aquí los estilos exclusivos de este módulo ── */
+        /* ── Estilos exclusivos del módulo Simplex Maximización ── */
+
+        /* Stat cards */
+        .stat-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.2rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 14px rgba(0,0,0,.07);
+            border-left: 4px solid var(--guinda);
+            transition: transform .25s, box-shadow .25s;
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(123,16,52,.12);
+        }
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--guinda-dark);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: .78rem;
+            color: #888;
+            font-weight: 500;
+            margin-top: .15rem;
+        }
+
+        /* Section icon (card headers) */
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* Cards internas */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 14px rgba(0,0,0,.07);
+        }
+        .card-header {
+            background: #fff;
+            border-bottom: 1px solid #f0e8eb;
+            border-radius: 12px 12px 0 0 !important;
+            padding: 1rem 1.4rem;
+        }
+        .card-title { font-weight: 600; color: var(--guinda-dark); }
+        .card-body { padding: 1.4rem; }
+
+        /* Botón Resolver */
+        .btn-solve {
+            background: linear-gradient(135deg, var(--guinda-dark), var(--guinda-light));
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: .7rem 2rem;
+            font-weight: 600;
+            font-size: .95rem;
+            transition: opacity .2s, transform .2s;
+            box-shadow: 0 4px 12px rgba(123,16,52,.3);
+        }
+        .btn-solve:hover { opacity: .9; transform: translateY(-2px); color: #fff; }
+        .btn-solve:active { transform: translateY(0); }
+
+        /* Input coeficiente */
+        .coef-input {
+            width: 80px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1.5px solid #d9cdd0;
+            padding: .4rem .5rem;
+            font-size: .9rem;
+            transition: border-color .2s;
+        }
+        .coef-input:focus {
+            outline: none;
+            border-color: var(--guinda);
+            box-shadow: 0 0 0 3px var(--guinda-alpha);
+        }
+        .coef-label {
+            font-size: .8rem;
+            color: #888;
+            display: block;
+            text-align: center;
+            margin-top: .2rem;
+        }
+
+        /* Tablas simplex */
+        .simplex-table { font-size: .82rem; }
+        .simplex-table th {
+            background: var(--guinda);
+            color: #fff;
+            font-weight: 600;
+            text-align: center;
+            padding: .5rem .6rem;
+            white-space: nowrap;
+        }
+        .simplex-table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: .45rem .6rem;
+        }
+        .simplex-table tr:nth-child(even) td { background: #faf5f7; }
+        .pivot-cell { background: #fff3cd !important; font-weight: 700; color: #856404; }
+        .entering-col { background: #cfe2ff !important; color: #084298; }
+        .leaving-row td:first-child { background: #f8d7da !important; color: #842029; font-weight: 600; }
+
+        /* Iteration card */
+        .iteration-card {
+            border-left: 4px solid var(--guinda);
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+        .iteration-header {
+            background: linear-gradient(90deg, var(--guinda-dark), var(--guinda));
+            color: #fff;
+            padding: .6rem 1rem;
+            font-weight: 600;
+            font-size: .88rem;
+        }
+        .iteration-body { padding: 1rem; background: #fff; overflow-x: auto; }
+
+        /* Resultado final */
+        .result-z-card {
+            background: linear-gradient(135deg, var(--guinda-dark), var(--guinda-light));
+            color: #fff;
+            border-radius: 12px;
+            padding: 1.8rem;
+            text-align: center;
+            margin-bottom: 1.2rem;
+        }
+        .result-var-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .8rem;
+            margin-top: .8rem;
+        }
+        .result-var-pill {
+            background: #fff;
+            border: 2px solid var(--guinda);
+            border-radius: 30px;
+            padding: .4rem 1.1rem;
+            font-weight: 600;
+            color: var(--guinda-dark);
+            font-size: .9rem;
+        }
+
+        /* Alert box */
+        #alertBox { border-radius: 10px; font-weight: 500; }
+
+        /* Formulación */
+        #formulationBlock p { margin-bottom: .4rem; color: #444; }
+        #formulationBlock strong { color: var(--guinda-dark); }
+
+        /* Separador de sección */
+        .section-divider {
+            border: none;
+            border-top: 2px solid #f0e8eb;
+            margin: 2rem 0;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Toggle sidebar -->
-    <button class="sidebar-toggle" id="sidebarToggle" title="Mostrar/Ocultar menú">
-        <i class="fas fa-bars"></i>
-    </button>
+<!-- Toggle sidebar -->
+<button class="sidebar-toggle" id="sidebarToggle" title="Mostrar/Ocultar menú">
+    <i class="fas fa-bars"></i>
+</button>
 
-    <!-- ============ SIDEBAR ============ -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <div class="sidebar-logo">
-                <i class="fas fa-chart-bar"></i>
-            </div>
-            <h3>Optimización Matemática</h3>
-            <p>IPN · UPIIZ · 6CM1</p>
+<!-- ============ SIDEBAR ============ -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <i class="fas fa-chart-bar"></i>
         </div>
+        <h3>Optimización Matemática</h3>
+        <p>IPN · UPIIZ · 6CM1</p>
+    </div>
 
-        <nav>
-            <div class="nav-section-title">Módulos</div>
-            <ul class="nav-menu">
-                <li>
-                    <a href="/index.html">
-                        <i class="fas fa-home"></i>
-                        <span>Inicio</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/equipo1">
-                        <i class="fas fa-bezier-curve"></i>
-                        <span>Método Gráfico</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/equipo2" class="active">
-                        <i class="fas fa-arrow-trend-up"></i>
-                        <span>Simplex Maximización</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/equipo3">
-                        <i class="fas fa-arrow-trend-down"></i>
-                        <span>Simplex Minimización</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/equipo4">
-                        <i class="fas fa-sliders"></i>
-                        <span>Minimización Avanzada</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/equipo5">
-                        <i class="fas fa-database"></i>
-                        <span>PERT CPM</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/equipo6">
-                        <i class="fas fa-water"></i>
-                        <span>Flujo Máximo</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/equipo7">
-                        <i class="fas fa-truck"></i>
-                        <span>Modelo de Transporte</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+    <nav>
+        <div class="nav-section-title">Módulos</div>
+        <ul class="nav-menu">
+            <li>
+                <a href="/index.html">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+            </li>
+            <li>
+                <a href="/equipo1">
+                    <i class="fas fa-bezier-curve"></i>
+                    <span>Método Gráfico</span>
+                </a>
+            </li>
+            <li>
+                <a href="/equipo2" class="active">
+                    <i class="fas fa-arrow-trend-up"></i>
+                    <span>Simplex Maximización</span>
+                </a>
+            </li>
+            <li>
+                <a href="/equipo3">
+                    <i class="fas fa-arrow-trend-down"></i>
+                    <span>Simplex Minimización</span>
+                </a>
+            </li>
+            <li>
+                <a href="/equipo4">
+                    <i class="fas fa-sliders"></i>
+                    <span>Minimización Avanzada</span>
+                </a>
+            </li>
+            <li>
+                <a href="/equipo5">
+                    <i class="fas fa-database"></i>
+                    <span>PERT CPM</span>
+                </a>
+            </li>
+            <li>
+                <a href="/equipo6">
+                    <i class="fas fa-water"></i>
+                    <span>Flujo Máximo</span>
+                </a>
+            </li>
+            <li>
+                <a href="/equipo7">
+                    <i class="fas fa-truck"></i>
+                    <span>Modelo de Transporte</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
 
-    <!-- ============ MAIN WRAPPER ============ -->
-    <div class="main-wrapper" id="mainWrapper">
+<!-- ============ MAIN WRAPPER ============ -->
+<div class="main-wrapper" id="mainWrapper">
 
-        <!-- TOP NAVBAR -->
-        <div class="top-navbar">
-            <h2 class="navbar-title" id="navbarTitle">Simplex Maximización</h2>
-            <div class="navbar-actions"></div>
-        </div>
+    <!-- TOP NAVBAR -->
+    <div class="top-navbar">
+        <h2 class="navbar-title" id="navbarTitle">Simplex Maximización</h2>
+        <div class="navbar-actions"></div>
+    </div>
 
-        <!-- ============ MAIN CONTENT ============ -->
-        <div class="main-content">
+    <!-- ============ MAIN CONTENT ============ -->
+    <div class="main-content">
 
-            <!-- HERO DE SECCIÓN -->
-            <div class="hero-section">
-                <div class="hero-content">
-                    <div class="hero-text">
-                        <h1><i class="fas fa-arrow-trend-up" style="opacity:0.85;"></i> Simplex Maximización</h1>
-                        <p>
-                            Resolución de problemas de programación lineal orientados a maximizar
-                            una función objetivo sujeta a restricciones de desigualdad.
-                        </p>
-                        <span class="hero-badge">
+        <!-- HERO -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1><i class="fas fa-arrow-trend-up" style="opacity:.85;"></i> Simplex Maximización</h1>
+                    <p>
+                        Resolución de problemas de programación lineal orientados a maximizar
+                        una función objetivo sujeta a restricciones de desigualdad.
+                    </p>
+                    <span class="hero-badge">
                             <i class="fas fa-circle-dot"></i>
                             Equipo 2 · Métodos Cuantitativos
                         </span>
+                </div>
+                <div class="hero-logo">
+                    <div class="hero-logo-box">
+                        <img src="/img/logotipo_ipn.png" alt="IPN">
                     </div>
-                    <div class="hero-logo">
-                        <div class="hero-logo-box">
-                            <img src="/img/logotipo_ipn.png" alt="IPN">
+                    <p style="margin-top:.8rem; font-size:.85rem; opacity:.8;">IPN · UPIIZ</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ALERT -->
+        <div id="alertBox" class="alert d-none" role="alert"></div>
+
+        <!-- STAT CARDS -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon bg-primary-subtle text-primary">
+                        <i class="bi bi-x-diamond-fill"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="statVars">2</div>
+                        <div class="stat-label">Variables</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon bg-success-subtle text-success">
+                        <i class="bi bi-bar-chart-steps"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="statConstraints">2</div>
+                        <div class="stat-label">Restricciones</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon bg-warning-subtle text-warning">
+                        <i class="bi bi-arrow-repeat"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="statIter">—</div>
+                        <div class="stat-label">Iteraciones</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="stat-card">
+                    <div class="stat-icon bg-info-subtle text-info">
+                        <i class="bi bi-trophy-fill"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value" id="statZ">—</div>
+                        <div class="stat-label">Z Óptima</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ROW: CONFIGURACIÓN + FUNCIÓN OBJETIVO -->
+        <div class="row g-4 mb-4">
+
+            <!-- CONFIGURACIÓN -->
+            <div class="col-12 col-xl-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center gap-2">
+                        <div class="section-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-sliders"></i>
                         </div>
-                        <p style="margin-top:0.8rem; font-size:0.85rem; opacity:0.8;">IPN · UPIIZ</p>
+                        <h6 class="card-title mb-0">Configuración</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Número de Variables</label>
+                            <select id="selVars" class="form-select">
+                                <option value="2">2 variables (x₁, x₂)</option>
+                                <option value="3">3 variables (x₁, x₂, x₃)</option>
+                                <option value="4">4 variables (x₁, x₂, x₃, x₄)</option>
+                                <option value="5">5 variables (x₁ … x₅)</option>
+                            </select>
+                            <div class="form-text">Variables de decisión del problema</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Número de Restricciones</label>
+                            <select id="selConstraints" class="form-select">
+                                <option value="1">1 restricción</option>
+                                <option value="2" selected>2 restricciones</option>
+                                <option value="3">3 restricciones</option>
+                                <option value="4">4 restricciones</option>
+                                <option value="5">5 restricciones</option>
+                                <option value="6">6 restricciones</option>
+                            </select>
+                            <div class="form-text">Sin contar no negatividad</div>
+                        </div>
+                        <div class="alert alert-info py-2 small mb-0">
+                            <i class="bi bi-info-circle me-1"></i>
+                            <strong>Supuesto:</strong> xⱼ ≥ 0 para toda j (no negatividad implícita).
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ── COLOCA AQUÍ EL CONTENIDO DE TU MÓDULO ─────────────────────────
-                 Clases disponibles en global.css:
-                   .content-block   → bloque blanco con sombra y padding
-                   .info-cards      → grid de tarjetas informativas
-                   .info-card       → tarjeta individual (borde guinda)
-                   .pill            → etiqueta pequeña de categoría
-            ──────────────────────────────────────────────────────────────────── -->
-
+            <!-- FUNCIÓN OBJETIVO -->
+            <div class="col-12 col-xl-8">
+                <div class="card h-100">
+                    <div class="card-header d-flex align-items-center gap-2">
+                        <div class="section-icon bg-success-subtle text-success">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <h6 class="card-title mb-0">Función Objetivo</h6>
+                        <span class="ms-auto badge bg-success-subtle text-success-emphasis">Maximizar Z</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted small mb-3">
+                            Ingresa los coeficientes de cada variable en la función objetivo a <strong>maximizar</strong>.
+                        </p>
+                        <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
+                            <span class="fw-bold fs-5" style="color:var(--guinda-dark);">Máx Z =</span>
+                            <div id="objFunctionRow" class="d-flex flex-wrap align-items-center gap-2"></div>
+                        </div>
+                        <div class="mt-3 p-3 bg-light rounded-3 small text-muted">
+                            <i class="bi bi-lightbulb text-warning me-1"></i>
+                            <strong>Ejemplo:</strong> Para Z = 5x₁ + 4x₂, escribe <kbd>5</kbd> en c₁ y <kbd>4</kbd> en c₂.
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- FOOTER -->
-        <div class="footer">
-            <p><span class="footer-brand">Sistema de Optimización Matemática</span> &copy; 2026</p>
-            <p style="font-size:0.82rem; color:#aaa; margin-top:0.3rem;">
-                IPN · UPIIZ · Métodos Cuantitativos para la Toma de Decisiones
-            </p>
+        <!-- RESTRICCIONES -->
+        <div class="card mb-4">
+            <div class="card-header d-flex align-items-center gap-2">
+                <div class="section-icon bg-warning-subtle text-warning">
+                    <i class="bi bi-list-check"></i>
+                </div>
+                <h6 class="card-title mb-0">Restricciones</h6>
+                <span class="ms-auto text-muted small">Ingresa los coeficientes y el lado derecho (RHS)</span>
+            </div>
+            <div class="card-body">
+                <div id="constraintsContainer"></div>
+            </div>
         </div>
+
+        <!-- BOTONES -->
+        <div class="d-flex gap-3 flex-wrap mb-4">
+            <button id="btnSolve" class="btn btn-solve">
+                <i class="bi bi-play-circle-fill me-2"></i>Resolver con Simplex
+            </button>
+            <button id="btnReset" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-counterclockwise me-2"></i>Limpiar
+            </button>
+        </div>
+
+        <hr class="section-divider">
+
+        <!-- RESULTADOS -->
+        <div id="resultsSection" class="d-none">
+
+            <!-- FORMULACIÓN -->
+            <div class="card mb-4" id="cardFormulation">
+                <div class="card-header d-flex align-items-center gap-2">
+                    <div class="section-icon bg-secondary-subtle text-secondary">
+                        <i class="bi bi-file-text"></i>
+                    </div>
+                    <h6 class="card-title mb-0">Formulación del Problema</h6>
+                </div>
+                <div class="card-body">
+                    <div id="formulationBlock" class="small"></div>
+                </div>
+            </div>
+
+            <!-- TABLAS ITERATIVAS -->
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center gap-2">
+                    <div class="section-icon bg-info-subtle text-info">
+                        <i class="bi bi-table"></i>
+                    </div>
+                    <h6 class="card-title mb-0">Tablas Iterativas — Paso a Paso</h6>
+                    <span class="ms-auto badge bg-info-subtle text-info-emphasis" id="badgeIter">0 iteraciones</span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3 small text-muted">
+                        <span class="badge bg-warning-subtle text-warning-emphasis me-2">▲ Celda pivote</span>
+                        <span class="badge bg-primary-subtle text-primary-emphasis me-2">Columna entrante</span>
+                        <span class="badge bg-danger-subtle text-danger-emphasis">Variable saliente</span>
+                    </div>
+                    <div id="iterationsContainer"></div>
+                </div>
+            </div>
+
+            <!-- SOLUCIÓN ÓPTIMA -->
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center gap-2">
+                    <div class="section-icon bg-success-subtle text-success">
+                        <i class="bi bi-trophy-fill"></i>
+                    </div>
+                    <h6 class="card-title mb-0">Solución Óptima</h6>
+                    <span class="ms-auto badge bg-success">✓ Óptimo encontrado</span>
+                </div>
+                <div class="card-body" id="finalResultBlock"></div>
+            </div>
+
+        </div>
+        <!-- /resultsSection -->
 
     </div>
+    <!-- /main-content -->
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/sidebar.js"></script>
-    <script>
-        // Agrega aquí el JavaScript exclusivo de este módulo
-    </script>
+    <!-- FOOTER -->
+    <div class="footer">
+        <p><span class="footer-brand">Sistema de Optimización Matemática</span> &copy; 2026</p>
+        <p style="font-size:.82rem; color:#aaa; margin-top:.3rem;">
+            IPN · UPIIZ · Métodos Cuantitativos para la Toma de Decisiones
+        </p>
+    </div>
+
+</div>
+<!-- /main-wrapper -->
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+<!-- Sidebar toggle (global.css) -->
+<script src="/js/sidebar.js"></script>
+
+<!-- Motor Simplex y controlador UI -->
+<script src="/js/simplex.js"></script>
+<script src="/js/app.js"></script>
+
+<script>
+    /* ── Precargar ejemplo al iniciar ── */
+    // app.js llama buildForms() en DOMContentLoaded; esperamos un tick más
+    // para que los inputs ya existan en el DOM antes de asignar valores.
+    document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+            // Función objetivo: Z = 5x1 + 4x2
+            document.getElementById("obj_x1").value = 5;
+            document.getElementById("obj_x2").value = 4;
+
+            // Restricción 1: 6x1 + 4x2 <= 24
+            document.getElementById("c1_x1").value = 6;
+            document.getElementById("c1_x2").value = 4;
+            document.getElementById("sign_1").value = "<=";
+            document.getElementById("rhs_1").value  = 24;
+
+            // Restricción 2: x1 + 2x2 <= 6
+            document.getElementById("c2_x1").value = 1;
+            document.getElementById("c2_x2").value = 2;
+            document.getElementById("sign_2").value = "<=";
+            document.getElementById("rhs_2").value  = 6;
+        }, 50);
+    });
+
+    /* ── Actualizar stat cards tras resolver ── */
+    document.getElementById("btnSolve").addEventListener("click", () => {
+        setTimeout(() => {
+            const iters = document.querySelectorAll(".iteration-card").length;
+            const zEl   = document.querySelector(".result-z-card .display-4");
+            document.getElementById("statVars").textContent        = document.getElementById("selVars").value;
+            document.getElementById("statConstraints").textContent = document.getElementById("selConstraints").value;
+            document.getElementById("statIter").textContent        = iters > 0 ? iters - 1 : "—";
+            document.getElementById("statZ").textContent           = zEl ? zEl.textContent.replace("Z* = ", "") : "—";
+            document.getElementById("badgeIter").textContent       = iters > 0 ? `${iters - 1} iteración(es)` : "0 iteraciones";
+        }, 100);
+    }, true);
+</script>
 </body>
 </html>
