@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{equipo3/layout :: head('Inicio')}"></head>
+<body class="app-body">
+
+<th:block th:replace="~{equipo3/layout :: sidebar}"></th:block>
+
+<div class="main-wrapper" id="mainWrapper">
+
+    <th:block th:replace="~{equipo3/layout :: navbar}"></th:block>
+
+    <div class="main-content">
+
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1><i class="fas fa-arrow-trend-down" style="opacity:0.85;"></i> Simplex Minimización</h1>
+                    <p>
+                        Herramienta educativa interactiva. Resuelve, visualiza y comprende
+                        cada paso del Simplex aplicado a problemas de costo mínimo.
+                    </p>
+                    <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap; margin-top: 1.5rem;">
+                        <span class="hero-badge">
+                            <i class="fas fa-circle-dot"></i>
+                            Equipo 3 · Métodos Cuantitativos
+                        </span>
+                        <a th:href="@{/equipo3/minimize}" class="btn" style="background-color: white; color: var(--guinda-dark); border-radius: 20px; font-weight: 600; padding: 0.4rem 1.2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                            <i class="bi bi-calculator-fill me-2"></i>Resolver Problema
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-logo">
+                    <div class="hero-logo-box"><img src="/img/logotipo_ipn.png" alt="IPN"></div>
+                    <p style="margin-top:0.8rem; font-size:0.85rem; opacity:0.8;">IPN · UPIIZ</p>
+                </div>
+            </div>
+        </div>
+        <div class="row g-4 mt-2">
+            <div class="col-12 col-md-4">
+                <a th:href="@{/equipo3/ejemplo}" class="text-decoration-none text-dark d-block h-100">
+                    <div class="feature-card h-100" style="cursor: pointer;">
+                        <div class="feature-icon feature-icon--blue">
+                            <i class="bi bi-arrow-left-right"></i>
+                        </div>
+                        <h3 class="feature-title">Transformación Explicada</h3>
+                        <p class="feature-desc">
+                            Ejemplo resuelto paso a paso. El sistema convierte Min Z → Max W multiplicando por −1,
+                            y explica cada signo en el resultado.
+                        </p>
+                        <div class="mt-2 text-primary fw-bold small">
+                            <i class="bi bi-book-fill"></i> Ver ejemplo completo
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="feature-card h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#pasoAPasoModal">
+                    <div class="feature-icon feature-icon--green">
+                        <i class="bi bi-table"></i>
+                    </div>
+                    <h3 class="feature-title">Tablas Paso a Paso</h3>
+                    <p class="feature-desc">
+                        Cada iteración se muestra con el pivote resaltado en azul,
+                        la variable entrante en verde y la variable saliente en rojo.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="feature-card h-100" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#erroresModal">
+                    <div class="feature-icon feature-icon--orange">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                    </div>
+                    <h3 class="feature-title">Errores Comunes</h3>
+                    <p class="feature-desc">
+                        Sección dedicada a los errores más frecuentes al interpretar
+                        minimización, incluyendo el signo de Z y el valor final real.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-block mt-4">
+            <div class="info-block__header">
+                <i class="bi bi-lightbulb-fill text-warning me-2"></i>
+                ¿Por qué se transforma Min Z en Max W?
+            </div>
+            <div class="info-block__body">
+                <div class="math-explanation">
+                    <div class="math-step">
+                        <div class="math-label">Problema original</div>
+                        <div class="math-formula">Min Z = c<sup>T</sup>x</div>
+                    </div>
+                    <div class="math-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                        <span>×(−1)</span>
+                    </div>
+                    <div class="math-step">
+                        <div class="math-label">Problema auxiliar</div>
+                        <div class="math-formula">Max W = −c<sup>T</sup>x</div>
+                    </div>
+                    <div class="math-arrow">
+                        <i class="bi bi-arrow-right-circle-fill"></i>
+                        <span>Al final</span>
+                    </div>
+                    <div class="math-step math-step--result">
+                        <div class="math-label">Resultado real</div>
+                        <div class="math-formula">Z<sub>min</sub> = −W*</div>
+                    </div>
+                </div>
+                <p class="mt-3 mb-0 text-muted small">
+                    El algoritmo Simplex está diseñado para <strong>maximizar</strong>.
+                    Multiplicar el objetivo por −1 invierte el sentido de optimización,
+                    permitiendo usar el mismo algoritmo. Al obtener W*, revertimos el signo
+                    para obtener el costo mínimo real Z.
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<th:block th:replace="~{equipo3/layout :: erroresModal}"></th:block>
+<th:block th:replace="~{equipo3/layout :: pasoAPasoModal}"></th:block>
+<th:block th:replace="~{equipo3/layout :: scripts}"></th:block>
+</body>
+</html>

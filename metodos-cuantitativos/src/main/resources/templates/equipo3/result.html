@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{equipo3/layout :: head('Resultados')}"></head>
+<body class="app-body">
+
+<th:block th:replace="~{equipo3/layout :: sidebar}"></th:block>
+
+<div class="main-wrapper" id="mainWrapper">
+    <th:block th:replace="~{equipo3/layout :: navbar}"></th:block>
+
+    <div class="main-content">
+        <div class="content-wrapper">
+
+            <th:block th:if="${errorMsg != null}">
+                <div class="alert alert-danger d-flex align-items-center">
+                    <i class="bi bi-x-circle-fill me-3 fs-4"></i>
+                    <div>
+                        <strong>Error al resolver:</strong>
+                        <span th:text="${errorMsg}"></span>
+                    </div>
+                </div>
+                <a th:href="@{/equipo3/minimize}" class="btn btn-primary-custom">
+                    <i class="bi bi-arrow-left me-2"></i>Volver al Formulario
+                </a>
+            </th:block>
+
+            <th:block th:if="${solved}">
+
+                <th:block th:if="${!result.feasible}">
+                    <div class="alert alert-warning d-flex align-items-center mb-4">
+                        <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+                        <div>
+                            <strong>Problema infactible:</strong> No existe solución que satisfaga
+                            todas las restricciones simultáneamente.
+                        </div>
+                    </div>
+                </th:block>
+
+                <th:block th:if="${result.feasible and !result.bounded}">
+                    <div class="alert alert-warning d-flex align-items-center mb-4">
+                        <i class="bi bi-exclamation-triangle-fill me-3 fs-4"></i>
+                        <div>
+                            <strong>Problema no acotado:</strong> La función objetivo puede
+                            decrecer indefinidamente.
+                        </div>
+                    </div>
+                </th:block>
+
+                <div class="page-header">
+                    <div>
+                        <h2 class="page-title">
+                            <i class="bi bi-check-circle-fill text-success me-2"></i>
+                            Solución Óptima Encontrada
+                        </h2>
+                        <p class="page-subtitle">
+                            <span th:text="${result.numIterations - 1}">3</span>
+                            iteraciones · Método Simplex de Minimización
+                        </p>
+                    </div>
+                    <a th:href="@{/equipo3/minimize}" class="btn btn-outline-custom">
+                        <i class="bi bi-arrow-left me-1"></i>Nuevo Problema
+                    </a>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-7">
+                        <div class="result-card">
+                            <div class="result-card__header">
+                                <i class="bi bi-x-diamond-fill me-2"></i>
+                                Variables de Decisión
+                            </div>
+                            <div class="result-card__body">
+                                <div class="vars-grid">
+                                    <div th:each="i : ${#numbers.sequence(0, result.numVars - 1)}"
+                                         class="var-item">
+                                        <div class="var-name"
+                                             th:text="'x' + (${i} + 1)">x1</div>
+                                        <div class="var-value"
+                                             th:text="${result.formatSolution(i)}">0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-5">
+                        <div class="result-card result-card--highlight">
+                            <div class="result-card__header">
+                                <i class="bi bi-trophy-fill me-2"></i>
+                                Valor Óptimo
+                            </div>
+                            <div class="result-card__body text-center">
+                                <div class="zmin-display">
+                                    <div class="zmin-label">Costo Mínimo Real</div>
+                                    <div class="zmin-value">
+                                        Z = <span th:text="${result.formatZMin()}">330</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="conversion-block mb-4">
+                    <div class="conversion-block__title">
+                        <i class="bi bi-arrow-left-right me-2"></i>
+                        Conversión Min Z → Max W (Transformación Matemática)
+                    </div>
+                    <div class="conversion-steps">
+                        <div class="conv-step">
+                            <div class="conv-label">Fila objetivo al finalizar</div>
+                            <div class="conv-formula">
+                                W* = <span th:text="${result.formatWStar()}">330</span>
+                            </div>
+                            <div class="conv-note">Valor auxiliar de maximización</div>
+                        </div>
+                        <div class="conv-arrow">
+                            <i class="bi bi-arrow-right-circle-fill"></i>
+                            <span>Z = −W*</span>
+                        </div>
+                        <div class="conv-step conv-step--final">
+                            <div class="conv-label">Costo mínimo real</div>
+                            <div class="conv-formula">
+                                Z<sub>min</sub> = <span th:text="${result.formatZMin()}">330</span>
+                            </div>
+                            <div class="conv-note">✅ Resultado final correcto</div>
+                        </div>
+                    </div>
+                    <div class="conversion-interp">
+                        <i class="bi bi-chat-quote-fill me-2 text-warning"></i>
+                        <span th:text="|El valor negativo de la fila objetivo (${result.formatWStar()}) corresponde a la transformación del problema. El costo mínimo real es ${result.formatZMin()} unidades.|">
+                            El valor negativo corresponde a la transformación del problema.
+                        </span>
+                    </div>
+                </div>
+
+                <div class="section-title-row">
+                    <h4 class="section-title">
+                        <i class="bi bi-table me-2"></i>
+                        Proceso Paso a Paso
+                    </h4>
+                    <span class="badge-aux">Resolviendo como maximización auxiliar</span>
+                </div>
+
+                <div th:each="it, stat : ${result.iterations}" class="iteration-block">
+
+                    <div class="iteration-header"
+                         th:classappend="${it.iterationNumber == 0} ? 'iteration-header--initial' : ''">
+                        <div class="iter-title">
+                            <span th:if="${it.iterationNumber == 0}">
+                                <i class="bi bi-play-circle-fill me-2"></i>
+                                Tabla Inicial (Iteración 0)
+                            </span>
+                            <span th:if="${it.iterationNumber > 0}">
+                                <i class="bi bi-arrow-clockwise me-2"></i>
+                                Iteración <span th:text="${it.iterationNumber}">1</span>
+                            </span>
+                        </div>
+                        <div class="iter-info" th:if="${it.iterationNumber > 0}">
+                            <span class="var-badge entering">
+                                <i class="bi bi-arrow-up-circle-fill me-1"></i>
+                                Entra: <strong th:text="${it.enteringVar}">x1</strong>
+                            </span>
+                            <span class="var-badge leaving">
+                                <i class="bi bi-arrow-down-circle-fill me-1"></i>
+                                Sale: <strong th:text="${it.leavingVar}">s1</strong>
+                            </span>
+                            <span class="pivot-badge">
+                                Pivote: <strong th:text="${#numbers.formatDecimal(it.pivotElement, 1, 'POINT', 4, 'POINT')}">1.0</strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="pivot-legend" th:if="${it.iterationNumber > 0}">
+                        <span class="legend-item pivot-legend-cell">🔵 Pivote</span>
+                        <span class="legend-item entering-legend-cell">🟢 Variable entrante (columna)</span>
+                        <span class="legend-item leaving-legend-cell">🔴 Variable saliente (fila)</span>
+                    </div>
+
+                    <div class="table-responsive tableau-wrapper">
+                        <table class="tableau-table">
+                            <thead>
+                            <tr>
+                                <th class="basis-col">Base</th>
+                                <th th:each="v, vStat : ${it.allVariables}"
+                                    th:classappend="${vStat.index == it.pivotCol} ? 'entering-col' : ''"
+                                    th:text="${v}">x1</th>
+                                <th class="rhs-col">RHS</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="rIdx : ${#numbers.sequence(0, it.numConstraintRows - 1)}"
+                                th:classappend="${rIdx == it.pivotRow} ? 'leaving-row' : ''">
+                                <td class="basis-cell"
+                                    th:text="${it.basisVariables[rIdx]}">s1</td>
+                                <td th:each="cIdx : ${#numbers.sequence(0, it.allVariables.length - 1)}"
+                                    th:with="val=${it.tableau[rIdx][cIdx]},
+                                                 isPivot=${it.isPivotCell(rIdx, cIdx)},
+                                                 isEnteringCol=${cIdx == it.pivotCol},
+                                                 isLeavingRow=${rIdx == it.pivotRow}"
+                                    th:classappend="${isPivot} ? 'pivot-cell' : (${isEnteringCol} ? 'entering-col-cell' : (${isLeavingRow} ? 'leaving-row-cell' : ''))"
+                                    th:text="${it.formatCell(val)}">0</td>
+                                <td class="rhs-cell"
+                                    th:with="rhs=${it.tableau[rIdx][it.allVariables.length]}"
+                                    th:text="${it.formatCell(rhs)}">0</td>
+                            </tr>
+                            <tr class="obj-row">
+                                <td class="basis-cell">W</td>
+                                <td th:each="cIdx : ${#numbers.sequence(0, it.allVariables.length - 1)}"
+                                    th:with="val=${it.tableau[it.numConstraintRows][cIdx]}"
+                                    th:classappend="${cIdx == it.pivotCol} ? 'entering-col-cell' : ''"
+                                    th:text="${it.formatCell(val)}">0</td>
+                                <td class="rhs-cell obj-rhs"
+                                    th:text="${it.formatCell(it.tableau[it.numConstraintRows][it.allVariables.length])}">0</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="optimal-note"
+                         th:if="${stat.last and result.feasible and result.bounded}">
+                        <i class="bi bi-check-circle-fill me-2 text-success"></i>
+                        <strong>Tabla óptima:</strong> No hay coeficientes negativos en la fila W.
+                        El óptimo ha sido alcanzado.
+                    </div>
+
+                </div></th:block></div>
+    </div>
+</div>
+
+<th:block th:replace="~{equipo3/layout :: erroresModal}"></th:block>
+<th:block th:replace="~{equipo3/layout :: scripts}"></th:block>
+</body>
+</html>

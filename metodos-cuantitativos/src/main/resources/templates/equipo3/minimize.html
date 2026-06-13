@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{equipo3/layout :: head('Minimización Simplex')}"></head>
+<body class="app-body">
+
+<th:block th:replace="~{equipo3/layout :: sidebar}"></th:block>
+
+<div class="main-wrapper" id="mainWrapper">
+    <th:block th:replace="~{equipo3/layout :: navbar}"></th:block>
+
+    <div class="main-content">
+        <div class="content-wrapper">
+
+            <div class="page-header">
+                <div>
+                    <h2 class="page-title">
+                        <i class="bi bi-calculator-fill me-2"></i>
+                        Método Simplex de Minimización
+                    </h2>
+                    <p class="page-subtitle">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Este sistema resuelve problemas de minimización usando el método simplex.
+                        No se admite maximización directa.
+                    </p>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <form id="simplexForm" method="post" th:action="@{/equipo3/minimize}">
+
+                    <div class="form-section">
+                        <div class="form-section-title">
+                            <span class="step-badge">1</span>
+                            Dimensiones del Problema
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6 col-md-4">
+                                <label class="form-label-custom">Número de variables (xᵢ)</label>
+                                <input type="number" id="numVars" name="numVars"
+                                       class="form-control form-control-custom"
+                                       min="1" max="10"
+                                       th:value="${numVars != null ? numVars : 2}"
+                                       placeholder="ej. 3" required/>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <label class="form-label-custom">Número de restricciones</label>
+                                <input type="number" id="numConstraints" name="numConstraints"
+                                       class="form-control form-control-custom"
+                                       min="1" max="10"
+                                       th:value="${numConstraints != null ? numConstraints : 2}"
+                                       placeholder="ej. 2" required/>
+                            </div>
+                            <div class="col-sm-12 col-md-4 d-flex align-items-end">
+                                <button type="button" id="buildTableBtn"
+                                        class="btn btn-secondary-custom w-100">
+                                    <i class="bi bi-grid-3x2-gap me-2"></i>
+                                    Construir Tabla
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="objSection" style="display:none">
+                        <div class="form-section-title">
+                            <span class="step-badge">2</span>
+                            Función Objetivo — <span class="text-accent">Minimizar Z</span>
+                        </div>
+                        <div class="obj-row">
+                            <span class="obj-label">Min Z =</span>
+                            <div id="objInputs" class="obj-inputs"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-section" id="constraintsSection" style="display:none">
+                        <div class="form-section-title">
+                            <span class="step-badge">3</span>
+                            Restricciones
+                        </div>
+                        <div id="constraintsInputs"></div>
+                    </div>
+
+                    <div id="solveSection" style="display:none">
+                        <div class="alert-minimize">
+                            <i class="bi bi-shield-check-fill me-2"></i>
+                            <span>Resolviendo como maximización auxiliar — La transformación Min Z → Max W se aplica automáticamente</span>
+                        </div>
+                        <button type="submit" class="btn btn-primary-custom btn-lg w-100">
+                            <i class="bi bi-play-fill me-2"></i>
+                            Resolver Minimización
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{equipo3/layout :: erroresModal}"></th:block>
+<th:block th:replace="~{equipo3/layout :: scripts}"></th:block>
+</body>
+</html>

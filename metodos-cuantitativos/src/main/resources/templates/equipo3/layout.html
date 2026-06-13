@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' | Simplex Minimización'">Simplex Minimización</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/simplex.css}" />
+</head>
+
+<th:block th:fragment="sidebar">
+    <button class="sidebar-toggle" id="sidebarToggle" title="Mostrar/Ocultar menú">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo"><i class="fas fa-chart-bar"></i></div>
+            <h3>Optimización Matemática</h3>
+            <p>IPN · UPIIZ · 6CM1</p>
+        </div>
+        <nav>
+            <div class="nav-section-title">Módulos</div>
+            <ul class="nav-menu">
+                <li><a th:href="@{/}"><i class="fas fa-home"></i><span>Inicio</span></a></li>
+                <li><a th:href="@{/equipo1}"><i class="fas fa-bezier-curve"></i><span>Método Gráfico</span></a></li>
+                <li><a th:href="@{/equipo2}"><i class="fas fa-arrow-trend-up"></i><span>Simplex Maximización</span></a></li>
+                <li><a th:href="@{/equipo3}" class="active"><i class="fas fa-arrow-trend-down"></i><span>Simplex Minimización</span></a></li>
+                <li><a th:href="@{/equipo4}"><i class="fas fa-sliders"></i><span>Minimización Avanzada</span></a></li>
+                <li><a th:href="@{/equipo5}"><i class="fas fa-database"></i><span>PERT CPM</span></a></li>
+                <li><a th:href="@{/equipo6}"><i class="fas fa-water"></i><span>Flujo Máximo</span></a></li>
+                <li><a th:href="@{/equipo7}"><i class="fas fa-truck"></i><span>Modelo de Transporte</span></a></li>
+            </ul>
+        </nav>
+    </aside>
+</th:block>
+
+<th:block th:fragment="navbar">
+    <div class="top-navbar">
+        <h2 class="navbar-title">Simplex Minimización</h2>
+        <div class="navbar-actions">
+        </div>
+    </div>
+</th:block>
+
+<th:block th:fragment="scripts">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/sidebar.js}"></script>
+    <script th:src="@{/js/simplex_min.js}"></script>
+</th:block>
+
+<th:block th:fragment="erroresModal">
+</th:block>
+
+<th:block th:fragment="pasoAPasoModal">
+</th:block>
+
+</html>
