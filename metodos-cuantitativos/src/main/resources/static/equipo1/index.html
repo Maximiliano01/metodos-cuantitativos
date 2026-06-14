@@ -13,11 +13,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- CSS compartido del proyecto – contiene sidebar, layout, componentes -->
-    <link rel="stylesheet" href="/css/global.css">
 
-    <style>
-        /* ── Agrega aquí los estilos exclusivos de este módulo ── */
-    </style>
+<link rel="stylesheet" href="/css/global.css">
+<link rel="stylesheet" href="/css/metodoGrafico.css">
+
 </head>
 <body>
 
@@ -107,48 +106,461 @@
         <div class="main-content">
 
             <!-- HERO DE SECCIÓN -->
-            <div class="hero-section">
-                <div class="hero-content">
-                    <div class="hero-text">
-                        <h1><i class="fas fa-bezier-curve" style="opacity:0.85;"></i> Método Gráfico</h1>
-                        <p>
-                            Resolución de problemas de programación lineal mediante la representación
-                            gráfica de la región factible y la función objetivo.
-                        </p>
-                        <span class="hero-badge">
-                            <i class="fas fa-circle-dot"></i>
-                            Equipo 1 · Métodos Cuantitativos
-                        </span>
-                    </div>
-                    <div class="hero-logo">
-                        <div class="hero-logo-box">
-                            <img src="/img/logotipo_ipn.png" alt="IPN">
-                        </div>
-                        <p style="margin-top:0.8rem; font-size:0.85rem; opacity:0.8;">IPN · UPIIZ</p>
-                    </div>
-                </div>
+           <div class="hero-section">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1><i class="fas fa-bezier-curve" style="opacity:0.85;"></i> Método Gráfico</h1>
+            <p>
+                Resolución de problemas de programación lineal mediante la representación
+                gráfica de la región factible y la función objetivo.
+            </p>
+            <span class="hero-badge">
+                <i class="fas fa-circle-dot"></i>
+                Equipo 1 · Métodos Cuantitativos
+            </span>
+            <button type="button" class="hero-badge text-white" style="border:none; cursor:pointer; margin-left:0.5rem;"
+                    data-bs-toggle="modal" data-bs-target="#modalExplicacion" >
+                <i class="fas fa-circle-info"></i>
+                ¿Qué es el Método Gráfico?
+            </button>
+        </div>
+        <div class="hero-logo">
+            <div class="hero-logo-box">
+                <img src="/img/logotipo_ipn.png" alt="IPN">
             </div>
+            <p style="margin-top:0.8rem; font-size:0.85rem; opacity:0.8;">IPN · UPIIZ</p>
+        </div>
+    </div>
+</div>
 
-            <!-- ── COLOCA AQUÍ EL CONTENIDO DE TU MÓDULO ─────────────────────────
-                 Clases disponibles en global.css:
-                   .content-block   → bloque blanco con sombra y padding
-                   .info-cards      → grid de tarjetas informativas
-                   .info-card       → tarjeta individual (borde guinda)
-                   .pill            → etiqueta pequeña de categoría
-                 Ejemplo:
-
-            <div class="content-block">
-                <h2><i class="fas fa-book-open" style="color:var(--guinda);"></i> Descripción</h2>
-                <p>Texto del módulo...</p>
+<!-- ============ MODAL: Explicación del Método Gráfico ============ -->
+<div class="modal fade" id="modalExplicacion" tabindex="-1" aria-labelledby="modalExplicacionLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalExplicacionLabel">
+                    <i class="fas fa-bezier-curve" style="color:var(--white);" data-bs-target="#modalExplicacion"></i>
+                    ¿Qué es el Método Gráfico?
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
+            <div class="modal-body">
+                <p>
+                    El <strong>método gráfico</strong> es una técnica para resolver problemas de
+                    <strong>programación lineal</strong> que involucran exactamente
+                    <strong>dos variables de decisión</strong> (x₁ y x₂). Permite encontrar la
+                    solución óptima de forma visual, representando todas las restricciones del
+                    problema en un plano cartesiano.
+                </p>
 
-            <div class="info-cards">
-                <div class="info-card">
-                    <h3>Título</h3>
-                    <p>Descripción</p>
-                </div>
+                <h6 class="mt-4"><i class="fas fa-list-ol" style="color:var(--guinda);"></i> ¿Cómo funciona?</h6>
+                <ol>
+                    <li>
+                        <strong>Definir la función objetivo:</strong> es la expresión que se desea
+                        maximizar o minimizar, de la forma Z = c₁x₁ + c₂x₂.
+                    </li>
+                    <li>
+                        <strong>Plantear las restricciones:</strong> son las limitaciones del
+                        problema (recursos, tiempo, capacidad, etc.), expresadas como inecuaciones
+                        o ecuaciones lineales.
+                    </li>
+                    <li>
+                        <strong>Graficar las restricciones:</strong> cada restricción se traza como
+                        una recta en el plano, dividiéndolo en dos regiones (factible y no factible).
+                    </li>
+                    <li>
+                        <strong>Identificar la región factible:</strong> es el área del plano donde
+                        se cumplen <em>simultáneamente</em> todas las restricciones. Todos los
+                        puntos dentro de esta región son soluciones posibles del problema.
+                    </li>
+                    <li>
+                        <strong>Encontrar los vértices:</strong> los puntos donde se cruzan dos o
+                        más restricciones (esquinas de la región factible) son los candidatos a
+                        solución óptima.
+                    </li>
+                    <li>
+                        <strong>Evaluar la función objetivo:</strong> se sustituye cada vértice en
+                        la función Z. El valor más alto (si se maximiza) o más bajo (si se minimiza)
+                        corresponde a la <strong>solución óptima</strong>.
+                    </li>
+                </ol>
+
+                <h6 class="mt-4"><i class="fas fa-lightbulb" style="color:var(--guinda);"></i> ¿Por qué basta revisar los vértices?</h6>
+                <p>
+                    Esto se debe al <strong>Teorema Fundamental de la Programación Lineal</strong>:
+                    si existe una solución óptima, esta siempre se encuentra en al menos uno de los
+                    vértices de la región factible, nunca en su interior. Por eso el método se
+                    enfoca en calcular y comparar únicamente esos puntos.
+                </p>
+
+                <h6 class="mt-4"><i class="fas fa-circle-info" style="color:var(--guinda);"></i> Casos especiales</h6>
+                <ul>
+                    <li><strong>Solución única:</strong> un solo vértice da el valor óptimo.</li>
+                    <li>
+                        <strong>Soluciones múltiples (óptimos alternos):</strong> ocurre cuando la
+                        función objetivo es paralela a una de las restricciones; toda la arista
+                        entre dos vértices da el mismo valor óptimo.
+                    </li>
+                    <li>
+                        <strong>Región no acotada:</strong> la región factible se extiende
+                        indefinidamente; puede que exista óptimo (si la función objetivo está
+                        acotada en esa dirección) o que el problema no tenga solución finita.
+                    </li>
+                    <li>
+                        <strong>Problema infactible:</strong> las restricciones son contradictorias
+                        entre sí y no existe ningún punto que las cumpla todas a la vez.
+                    </li>
+                </ul>
+
+                <h6 class="mt-4"><i class="fas fa-toolbox" style="color:var(--guinda);"></i> Cómo usar esta herramienta</h6>
+                <p>
+                    Ingresa los coeficientes de tu función objetivo y hasta tres restricciones en
+                    el panel izquierdo, indica si quieres <strong>maximizar</strong> o
+                    <strong>minimizar</strong>, y presiona <strong>Calcular y Graficar</strong>.
+                    La herramienta dibujará automáticamente las restricciones, sombreará la región
+                    factible, marcará sus vértices y resaltará el punto óptimo junto con el valor
+                    de Z. También puedes cargar ejemplos predefinidos o trazar rectas adicionales
+                    de forma manual para comparar pendientes.
+                </p>
             </div>
-            ──────────────────────────────────────────────────────────────────── -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Entendido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+            <!-- metodo grafico: -->
+             <div class="app">
+
+  <!-- HEADER -->
+  
+
+  <div class="main">
+
+    <!-- PANEL IZQUIERDO -->
+    <aside class="panel-left">
+
+      <!-- Tipo de optimización -->
+      <div class="panel-section">
+        <div class="sec-label">
+          <div class="sec-label-icon">
+            <svg viewBox="0 0 12 12" fill="none">
+              <path d="M6 2v8M2 6h8" stroke="#6B1A2A" stroke-width="1.8" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="sec-label-text">Tipo de Optimización</span>
+        </div>
+        <div class="type-toggle">
+          <button class="type-btn active" id="btnMax">
+            <svg viewBox="0 0 13 13" fill="none">
+              <path d="M2 11L6.5 2l4.5 9" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3.8 8h5.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            Maximizar
+          </button>
+          <button class="type-btn" id="btnMin">
+            <svg viewBox="0 0 13 13" fill="none">
+              <path d="M2 2L6.5 11l4.5-9" stroke="currentColor" stroke-width="1.6"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3.8 5h5.4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+            Minimizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Función objetivo -->
+      <div class="panel-section">
+        <div class="sec-label">
+          <div class="sec-label-icon">
+            <svg viewBox="0 0 12 12" fill="none">
+              <path d="M1 11L5 1l6 10" stroke="#6B1A2A" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="sec-label-text">Función Objetivo</span>
+        </div>
+        <div class="obj-box">
+          <div class="obj-row">
+            <span class="obj-z">Z =</span>
+            <div class="coef-unit">
+              <input class="coef-field" type="number" id="c1" value="5" placeholder="c₁">
+              <span class="var-tag">x₁</span>
+              <span class="op-sym">+</span>
+              <input class="coef-field" type="number" id="c2" value="4" placeholder="c₂">
+              <span class="var-tag">x₂</span>
+            </div>
+          </div>
+          <p class="obj-hint">Ingresa los coeficientes de la función a optimizar</p>
+        </div>
+      </div>
+
+      <!-- Restricciones -->
+      <div class="panel-section">
+        <div class="sec-label">
+          <div class="sec-label-icon">
+            <svg viewBox="0 0 12 12" fill="none">
+              <rect x="1.5" y="1.5" width="9" height="9" rx="2" stroke="#6B1A2A" stroke-width="1.4"/>
+              <path d="M4 6h4M6 4v4" stroke="#6B1A2A" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="sec-label-text">Restricciones</span>
+        </div>
+
+        <div class="restrictions-list" id="restrictionsList">
+          <!-- Restricción 1 -->
+          <div class="rest-row">
+            <div class="rest-idx" style="background:#C4566A;">1</div>
+            <input class="rest-coef" type="number" value="6" placeholder="a₁">
+            <span class="rest-var">x₁</span>
+            <span class="rest-op">+</span>
+            <input class="rest-coef" type="number" value="4" placeholder="a₂">
+            <span class="rest-var">x₂</span>
+            <select class="ineq-sel">
+              <option value="<=" selected>≤</option>
+              <option value=">=">≥</option>
+              <option value="=">=</option>
+            </select>
+            <input class="rest-rhs" type="number" value="24" placeholder="b">
+            <button class="rest-del" title="Eliminar restricción">×</button>
+          </div>
+
+          <!-- Restricción 2 -->
+          <div class="rest-row">
+            <div class="rest-idx" style="background:#2D7FC4;">2</div>
+            <input class="rest-coef" type="number" value="1" placeholder="a₁">
+            <span class="rest-var">x₁</span>
+            <span class="rest-op">+</span>
+            <input class="rest-coef" type="number" value="2" placeholder="a₂">
+            <span class="rest-var">x₂</span>
+            <select class="ineq-sel">
+              <option value="<=" selected>≤</option>
+              <option value=">=">≥</option>
+              <option value="=">=</option>
+            </select>
+            <input class="rest-rhs" type="number" value="6" placeholder="b">
+            <button class="rest-del" title="Eliminar restricción">×</button>
+          </div>
+
+          <!-- Restricción 3 -->
+          <div class="rest-row">
+            <div class="rest-idx" style="background:#2D9E6B;">3</div>
+            <input class="rest-coef" type="number" value="1" placeholder="a₁">
+            <span class="rest-var">x₁</span>
+            <span class="rest-op">+</span>
+            <input class="rest-coef" type="number" value="0" placeholder="a₂">
+            <span class="rest-var">x₂</span>
+            <select class="ineq-sel">
+              <option value="<=" selected>≤</option>
+              <option value=">=">≥</option>
+              <option value="=">=</option>
+            </select>
+            <input class="rest-rhs" type="number" value="4" placeholder="b">
+            <button class="rest-del" title="Eliminar restricción">×</button>
+          </div>
+        </div>
+
+        <button class="add-rest-btn">
+          <svg viewBox="0 0 13 13" fill="none">
+            <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M6.5 4v5M4 6.5h5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+          Agregar restricción
+        </button>
+      </div>
+
+      <!-- Ejemplos predefinidos -->
+      <div class="panel-section">
+        <div class="sec-label">
+          <div class="sec-label-icon">
+            <svg viewBox="0 0 12 12" fill="none">
+              <rect x="1.5" y="1.5" width="9" height="9" rx="1.5" stroke="#6B1A2A" stroke-width="1.3"/>
+              <path d="M3.5 4.5h5M3.5 6.5h5M3.5 8.5h3" stroke="#6B1A2A" stroke-width="1.1" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="sec-label-text">Ejemplos Predefinidos</span>
+        </div>
+        <div class="examples-grid">
+          <button class="ex-btn">Ejemplo 1 (Max)</button>
+          <button class="ex-btn">Ejemplo 2 (Max)</button>
+          <button class="ex-btn">Ejemplo 3 (Min)</button>
+          <button class="ex-btn">Ejemplo 4 (Min)</button>
+          <button class="ex-btn clear">Limpiar todo</button>
+        </div>
+      </div>
+
+      <!-- Opciones -->
+      <div class="panel-section">
+        <div class="sec-label">
+          <div class="sec-label-icon">
+            <svg viewBox="0 0 12 12" fill="none">
+              <circle cx="6" cy="6" r="2" stroke="#6B1A2A" stroke-width="1.3"/>
+              <path d="M6 1v2M6 9v2M1 6h2M9 6h2" stroke="#6B1A2A" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="sec-label-text">Opciones</span>
+        </div>
+
+        <div class="opts-row">
+          <div class="opt-group">
+            <svg viewBox="0 0 12 12" fill="none" width="13" height="13">
+              <path d="M1 10l3-4 3 3 4-6" stroke="#7A4A52" stroke-width="1.3"
+                    stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Decimales:</span>
+            <input class="opt-num" type="number" id="decimals" value="2" min="0" max="6">
+          </div>
+          <label class="toggle-label">
+            <input type="checkbox" id="showCoords" checked>
+            <span>Mostrar vértices</span>
+          </label>
+        </div> 
+        
+      </div>
+
+      <!-- Botón principal para calcular -->
+      <button class="calc-btn">
+        <svg viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="6.5" stroke="rgba(255,255,255,0.3)" stroke-width="1.2"/>
+          <path d="M8 4.5v7M4.5 8h7" stroke="white" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        Calcular y Graficar
+      </button>
+
+      <!-- Solución -->
+      <div class="solution-area">
+        <div class="sec-label" style="margin-bottom:12px;">
+          <div class="sec-label-icon">
+            <svg viewBox="0 0 12 12" fill="none">
+              <path d="M6 1l1.3 3.8H11L8.1 7l1.2 3.7L6 8.7 2.7 10.7 3.9 7 1 4.8h3.7z"
+                    stroke="#6B1A2A" stroke-width="1.1" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <span class="sec-label-text">Solución</span>
+        </div>
+        <div id="solutionBox">
+          <div class="sol-empty">
+            Presiona <strong>Calcular y Graficar</strong><br>
+            para ver la solución aquí.
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Panel de la gráfica -->
+    <section class="panel-right">
+
+      <!-- Barra superior -->
+      <div class="graph-topbar">
+        <div class="graph-title-block">
+          <h2 class="graph-title">Región Factible &amp; Solución Óptima</h2>
+          <p class="graph-subtitle">
+            Intersección de restricciones · Vértices evaluados
+          </p>
+        </div>
+      </div>
+
+<!-- Controles de rango -->
+      <div class="range-row">
+        <span class="range-lbl">X</span>
+        <input class="range-field" id="xmin" type="number" value="0" placeholder="min">
+        <span class="range-sep">→</span>
+        <input class="range-field" id="xmax" type="number" value="20" placeholder="max">
+        <div class="range-divider"></div>
+        <span class="range-lbl">Y</span>
+        <input class="range-field" id="ymin" type="number" value="0" placeholder="min">
+        <span class="range-sep">→</span>
+        <input class="range-field" id="ymax" type="number" value="20" placeholder="max">
+      </div>  
+      <!-- Rectas manuales -->
+      <div class="manual-lines-panel">
+        <div class="manual-lines-header">
+          <span>Rectas Manuales</span>
+        </div>
+        <div class="manual-lines-input">
+          <div class="point-input-group">
+            <span class="point-label">Punto 1:</span>
+            <input type="number" id="p1x" class="point-field" placeholder="x₁" value="0">
+            <span class="point-sep">,</span>
+            <input type="number" id="p1y" class="point-field" placeholder="x₂" value="0">
+          </div>
+          <div class="point-input-group">
+            <span class="point-label">Punto 2:</span>
+            <input type="number" id="p2x" class="point-field" placeholder="x₁" value="5">
+            <span class="point-sep">,</span>
+            <input type="number" id="p2y" class="point-field" placeholder="x₂" value="5">
+          </div>
+          <button class="add-manual-line-btn" id="addManualLineBtn">
+            <svg viewBox="0 0 13 13" fill="none" width="12" height="12">
+              <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M6.5 4v5M4 6.5h5" stroke="currentColor" stroke-width="1.4"/>
+            </svg>
+            Agregar recta
+          </button>
+        </div>
+        <div class="manual-lines-list" id="manualLinesList">
+          <div class="manual-lines-empty">No hay rectas manuales. Usa los puntos para agregar una.</div>
+        </div>
+      </div>
+
+      <!-- Leyenda -->
+      <div class="legend-bar" id="legendBar">
+        <div class="legend-item">
+          <div class="leg-region"></div>
+          <span>Región factible</span>
+        </div>
+        <div class="legend-item">
+          <div class="leg-line" style="background:#C4566A;"></div>
+          <span>R1</span>
+        </div>
+        <div class="legend-item">
+          <div class="leg-line" style="background:#2D7FC4;"></div>
+          <span>R2</span>
+        </div>
+        <div class="legend-item">
+          <div class="leg-line" style="background:#2D9E6B;"></div>
+          <span>R3</span>
+        </div>
+      </div>
+
+      <!-- Canvas -->
+      <div class="graph-wrap">
+        <canvas id="graphCanvas"></canvas>
+        <div class="canvas-placeholder">
+          <svg viewBox="0 0 90 70" fill="none" width="90">
+            <polyline points="10,60 10,8 82,8"
+                      stroke="rgba(107,26,42,0.18)" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="10" y1="60" x2="82" y2="60"
+                  stroke="rgba(107,26,42,0.1)" stroke-width="1.5" stroke-linecap="round"/>
+            <polygon points="10,60 42,60 42,30 22,30"
+                     fill="rgba(107,26,42,0.07)" stroke="rgba(107,26,42,0.22)"
+                     stroke-width="1" stroke-dasharray="3 2"/>
+            <line x1="10" y1="30" x2="58" y2="60" stroke="#C4566A" stroke-width="1.5" opacity="0.5"/>
+            <line x1="22" y1="8"  x2="10" y2="40" stroke="#2D7FC4" stroke-width="1.5" opacity="0.5"/>
+            <line x1="42" y1="8"  x2="42" y2="63" stroke="#2D9E6B" stroke-width="1.5" opacity="0.5"/>
+            <circle cx="42" cy="30" r="5" fill="rgba(107,26,42,0.12)" stroke="rgba(107,26,42,0.4)" stroke-width="1.3"/>
+            <circle cx="42" cy="30" r="2.5" fill="rgba(107,26,42,0.55)"/>
+          </svg>
+          <p>Configura el problema y presiona<br>
+             <strong>Calcular y Graficar</strong></p>
+        </div>
+      </div>
+
+      <!-- Panel de pasos -->
+      <div class="steps-panel" id="stepsPanel">
+        Configure el problema en el panel izquierdo y presione
+        <strong>Calcular y Graficar</strong>
+        para ver el proceso de solución paso a paso.
+      </div>
+
+    </section>
+
+  </div>
+</div>
 
         </div>
         <!-- /main-content -->
@@ -169,9 +581,23 @@
     <!-- JS compartido – sidebar toggle y detección de ruta activa -->
     <script src="/js/sidebar.js"></script>
 
-    <script>
-        // Agrega aquí el JavaScript exclusivo de este módulo
-    </script>
+<script src="/js/metodoGraficoJS/Maximizacion.js" defer></script>
+<script src="/js/metodoGraficoJS/Minimizacion.js" defer></script>
+<script src="/js/metodoGraficoJS/Metodo.js" defer></script>
+<script src="/js/metodoGraficoJS/graficas.js" defer></script>
+<script src="/js/metodoGraficoJS/ejemplos.js" defer></script>
+
+<script>
+    // Abrir el modal de explicación automáticamente la primera vez
+    document.addEventListener('DOMContentLoaded', () => {
+        const yaVisto = localStorage.getItem('metodoGraficoExplicacionVista');
+        if (!yaVisto) {
+            const modal = new bootstrap.Modal(document.getElementById('modalExplicacion'));
+            modal.show();
+            localStorage.setItem('metodoGraficoExplicacionVista', 'true');
+        }
+    });
+</script>
 
 </body>
 </html>
