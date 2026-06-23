@@ -3,7 +3,7 @@
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title} + ' | Simplex Minimización'">Simplex Minimización</title>
+    <title th:text="${title} + ' | Simplex Minimización'"></title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -56,9 +56,79 @@
 </th:block>
 
 <th:block th:fragment="erroresModal">
+    <div class="modal fade" id="erroresModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content errores-modal">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title">
+                        <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                        Errores Frecuentes en Minimización
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-3 pb-4">
+                    <div class="alert alert-info border-0 mb-4 d-flex align-items-center gap-3">
+                        <i class="bi bi-lightbulb-fill fs-4"></i>
+                        <div>
+                            La minimización suele causar confusión por el manejo de signos.
+                            Aquí tienes los errores más comunes de los estudiantes:
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column gap-3">
+                        <div class="error-card error-card--bad">
+                            <i class="bi bi-x-octagon-fill error-icon"></i>
+                            <div>
+                                <div class="error-title">No revertir el signo al final</div>
+                                <div class="error-desc">Se resuelve el problema auxiliar Max W, se obtiene un valor negativo (ej. -330) y se reporta como resultado final. El costo nunca es negativo.</div>
+                                <div class="error-fix"><i class="bi bi-check-circle-fill me-1"></i><strong>Corrección:</strong> Recordar siempre que Z_min = -W*.</div>
+                            </div>
+                        </div>
+                        <div class="error-card error-card--bad">
+                            <i class="bi bi-x-octagon-fill error-icon"></i>
+                            <div>
+                                <div class="error-title">Criterio de parada incorrecto</div>
+                                <div class="error-desc">Detenerse cuando todavía hay valores negativos en la fila objetivo (W) transformada.</div>
+                                <div class="error-fix"><i class="bi bi-check-circle-fill me-1"></i><strong>Corrección:</strong> Como convertimos a Max W, el algoritmo termina cuando TODOS los coeficientes de la fila W son ≥ 0.</div>
+                            </div>
+                        </div>
+                        <div class="error-card error-card--bad">
+                            <i class="bi bi-x-octagon-fill error-icon"></i>
+                            <div>
+                                <div class="error-title">Elegir variable entrante mal</div>
+                                <div class="error-desc">Elegir el coeficiente más positivo en lugar del más negativo en la fila transformada.</div>
+                                <div class="error-fix"><i class="bi bi-check-circle-fill me-1"></i><strong>Corrección:</strong> En el modelo transformado (Max W), entra la variable con el coeficiente MÁS NEGATIVO en la fila W.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </th:block>
 
 <th:block th:fragment="pasoAPasoModal">
+    <div class="modal fade" id="pasoAPasoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom-0 pb-0">
+                    <h5 class="modal-title">
+                        <i class="bi bi-table text-success me-2"></i>
+                        Tablas Simplex Paso a Paso
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-3 pb-4">
+                    <p>Esta herramienta desglosa el método Simplex en cada una de sus iteraciones, permitiéndote visualizar el proceso matemático completo:</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><i class="bi bi-arrow-right-short text-primary"></i> <strong>Cálculo de pivote:</strong> Identificación automática del elemento clave.</li>
+                        <li class="list-group-item"><i class="bi bi-arrow-right-short text-success"></i> <strong>Variable entrante:</strong> Resaltada en verde para facilitar el seguimiento.</li>
+                        <li class="list-group-item"><i class="bi bi-arrow-right-short text-danger"></i> <strong>Variable saliente:</strong> Resaltada en rojo para mostrar la sustitución.</li>
+                        <li class="list-group-item"><i class="bi bi-arrow-right-short text-info"></i> <strong>Iteraciones:</strong> Navegación clara entre cada estado de la tabla hasta llegar a la solución óptima.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </th:block>
 
 </html>
